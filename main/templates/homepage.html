@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+    <title>Homepage</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+
+            <button class="btn" style="background-color: var(--color4); color: white; margin-top: 10px;" type="submit">Convert</button>
+
+            {% if not user.is_authenticated %}<p>Don't have an account yet? <a href="/register">Register</a>!</p>{% endif %}
+
+            {% if convert_link %}<p><a href="{% get_media_prefix %}{{convert_link}}" download>Download converted image</a></p>{% endif %}
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/homepage.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,5 @@
+.env
+db.sqlite3
+a_fazer.txt
+main/__pycache__
+conversor/__pycache__
