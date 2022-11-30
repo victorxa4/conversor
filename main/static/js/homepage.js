@@ -1,6 +1,4 @@
 document.querySelector('.container form input[name="image"]').addEventListener('click', e => {
-    // e.target.accept = 'image/png'
-
     var image_format = document.querySelector('.container form select[name="image_format"]').value
     var target_format = document.querySelector('.container form select[name="target_format"]').value
 

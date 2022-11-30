@@ -6,15 +6,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import CreateUserProfileForm, EditUserProfileForm, ConvertImage
 from django.core.files.images import ImageFile
 
-accepted_formats = [
-    'PNG',
-    'JPEG',
-    'PPM',
-    'GIF',
-    'TIFF',
-    'BMP'
-]
-
 def homepage(request):
     context = {}
 
@@ -41,6 +32,7 @@ def register(request):
 
     if request.method == 'POST':
         form = CreateUserProfileForm(request.POST)
+        print(form)
         if form.is_valid():
             user = form.save()
             messages.success(request, f'New user "{user.username}" created successfully!')
@@ -121,6 +113,3 @@ def changePassword(request):
 def logout(request):
     auth_logout(request)
     return redirect('main:login')
-
-## inclusion tags
-

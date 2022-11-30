@@ -5,6 +5,7 @@ from .models import Conversion
 from PIL import Image
 from django.conf import settings
 import os
+from django.core.exceptions import ValidationError
 
 accepted_formats = [
     ('PNG', 'PNG'),
@@ -31,34 +32,38 @@ class EditUserProfileForm(UserChangeForm):
 class ConvertImage(forms.Form):
     error_messages = {
         "same_formats": ("You can't convert a image formart to itself."),
+        "image_format": ("Image format not supported."),
+        "invalid_form": ("Invalid Form")
     }
 
     image_format = forms.MultipleChoiceField(choices = accepted_formats)
     target_format = forms.MultipleChoiceField(choices = accepted_formats)
     image = forms.ImageField()
 
-    # def clean_image_format(self):
-    #     image_format = self.cleaned_data.get("image_format")
-    #     target_format = self.cleaned_data.get("target_format")
-    #     print(image_format)
-    #     print(target_format)
-
-    #     if image_format == target_format:
-    #         raise ValidationError(
-    #             self.error_messages["same_format"],
-    #             code="same_format",
-    #         )
-    #     return image_format
-
     def clean(self):
         image_format = self.cleaned_data.get("image_format")[0]
         target_format = self.cleaned_data.get("target_format")[0]
         image = self.cleaned_data.get("image")
 
-        if image_format == target_format:
-            self.add_error("same_format", "You can't convert a image formart to itself.")
+        if image:
+            if image.name.split('.')[-1].upper() in [format[0] for format in accepted_formats]:
+                if image_format == target_format:
+                    raise ValidationError(
+                        self.error_messages["same_formats"],
+                        code="same_formats",
+                    )
+                else:
+                    return self.cleaned_data
+            else:
+                raise ValidationError(
+                    self.error_messages["image_format"],
+                    code="image_format",
+                )
         else:
-            return self.cleaned_data
+            raise ValidationError(
+                self.error_messages["invalid_form"],
+                code="invalid_form",
+            )
 
     def save(self):
         image_format = self.cleaned_data.get("image_format")[0]
@@ -70,18 +75,16 @@ class ConvertImage(forms.Form):
         conversion.save()
 
         self.conversion = conversion
-
-        # self.image_format= conversion.image_format
-        # self.target_format = conversion.target_format
-        # self.image = conversion.image
         
         return conversion
 
     def convert(self):
         if self.conversion.image:
-            filename = self.conversion.image.name.split('.')[0]
+            filename = self.conversion.image.name.split('.')
+            filename.pop()
+            filename = '.'.join(filename)
             
-            old_img = f'{settings.MEDIA_ROOT}\\{filename}.{self.conversion.image_format.lower()}'
+            old_img = f'{settings.MEDIA_ROOT}\\{self.conversion.image.name}'
             new_img = f'{settings.MEDIA_ROOT}\\{filename}.{self.conversion.target_format.lower()}'
 
             image = Image.open(old_img)
