@@ -47,7 +47,7 @@ class ConvertImage(forms.Form):
         image = self.cleaned_data.get("image")
 
         if image:
-            if image.name.split('.')[-1].upper() in [format[0] for format in accepted_formats]:
+            if image.name.split('.')[-1].upper() in [format[0] for format in accepted_formats] + ['JPG']:
                 if image_format == target_format:
                     raise ValidationError(
                         self.error_messages["same_formats"],
