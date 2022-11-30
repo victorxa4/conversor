@@ -75,12 +75,13 @@ class ConvertImage(forms.Form):
         conversion.save()
 
         if conversion.image:
+            print(conversion.image)
             filename = conversion.image.name.split('.')
             filename.pop()
             filename = '.'.join(filename)
             
-            old_img = f'{settings.MEDIA_ROOT}\\{conversion.image.name}'
-            new_img = f'{settings.MEDIA_ROOT}\\{filename}.{conversion.target_format.lower()}'
+            old_img = f'{settings.MEDIA_ROOT}/{conversion.image.name}'
+            new_img = f'{settings.MEDIA_ROOT}/{filename}.{conversion.target_format.lower()}'
 
             image = Image.open(old_img)
 
