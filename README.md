@@ -1,6 +1,6 @@
-Hosted @ http://imageconversor.pythonanywhere.com
+# Image Format Converter
 
-A image forma converter.
+Hosted @ http://imageconversor.pythonanywhere.com
 
 Supported formats:
 
