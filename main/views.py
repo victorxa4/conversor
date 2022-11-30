@@ -15,6 +15,8 @@ def homepage(request):
             convert_link = form.save().image
 
             context['convert_link'] = convert_link
+
+            messages.success(request, f'Image successfully converted.')
         else:
             messages.error(request, f'Invalid Form')
 
