@@ -10,5 +10,6 @@ Supported formats:
 - GIF
 - TIFF
 - BMP
+- WEBP
 
 ---
