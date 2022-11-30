@@ -12,8 +12,7 @@ def homepage(request):
     if request.method == 'POST':
         form = ConvertImage(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            convert_link = form.convert()
+            convert_link = form.save().image
 
             context['convert_link'] = convert_link
         else:

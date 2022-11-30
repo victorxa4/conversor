@@ -74,18 +74,13 @@ class ConvertImage(forms.Form):
 
         conversion.save()
 
-        self.conversion = conversion
-        
-        return conversion
-
-    def convert(self):
-        if self.conversion.image:
-            filename = self.conversion.image.name.split('.')
+        if conversion.image:
+            filename = conversion.image.name.split('.')
             filename.pop()
             filename = '.'.join(filename)
             
-            old_img = f'{settings.MEDIA_ROOT}\\{self.conversion.image.name}'
-            new_img = f'{settings.MEDIA_ROOT}\\{filename}.{self.conversion.target_format.lower()}'
+            old_img = f'{settings.MEDIA_ROOT}\\{conversion.image.name}'
+            new_img = f'{settings.MEDIA_ROOT}\\{filename}.{conversion.target_format.lower()}'
 
             image = Image.open(old_img)
 
@@ -94,10 +89,12 @@ class ConvertImage(forms.Form):
 
             os.remove(old_img)
 
-            self.conversion.image = f'{filename}.{self.conversion.target_format.lower()}'
-            self.conversion.save()
-
-            return self.conversion.image
+            conversion.image = f'{filename}.{conversion.target_format.lower()}'
+            conversion.save()
+        else:
+            conversion.delete()
+        
+        return conversion
 
     class Meta:
         model = Conversion
