@@ -7,7 +7,8 @@ accepted_formats = [
     ('PPM', 'PPM'),
     ('GIF', 'GIF'),
     ('TIFF', 'TIFF'),
-    ('BMP', 'BMP')
+    ('BMP', 'BMP'),
+    ('WEBP', 'WEBP')
 ]
 
 class Conversion(models.Model):
